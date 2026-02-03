@@ -1,6 +1,6 @@
-import { TToken } from "../tokenizer/index";
+import type { TToken } from "../tokenizer/index";
 import { TokenCursor } from "./cursor";
-import { Program } from "./ast/stmt";
+import type { Program } from "./ast/stmt";
 import { parseStatement } from "./stmt";
 
 export function parse(tokenStream: Generator<TToken>): Program {
@@ -8,10 +8,6 @@ export function parse(tokenStream: Generator<TToken>): Program {
     const body = [];
     
     while (cursor.peek) {
-        if (cursor.match(['WHITESPACE'])) {
-             cursor.consume();
-             continue;
-        }
         
         body.push(parseStatement(cursor));
     }

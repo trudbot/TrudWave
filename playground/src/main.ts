@@ -18,7 +18,7 @@ inputCode.value = defaultCode;
 
 // --- AST Custom Renderer Logic ---
 
-function createASTNode(data: any, keyName?: string): HTMLElement {
+function createASTNode(data: any): HTMLElement {
     const container = document.createElement('div');
 
     // 1. Primitive Values
@@ -39,7 +39,7 @@ function createASTNode(data: any, keyName?: string): HTMLElement {
             container.innerHTML = '<span style="color:#999">[]</span>';
             return container;
         }
-        data.forEach((item, index) => {
+        data.forEach((item) => {
             const row = document.createElement('div');
             row.className = 'ast-field';
             // Array items usually don't need keys unless debugging, but let's just show index if needed
@@ -110,7 +110,7 @@ function createASTNode(data: any, keyName?: string): HTMLElement {
             keyEl.className = 'ast-key';
             keyEl.textContent = key + ':';
             
-            const valEl = createASTNode(data[key], key);
+            const valEl = createASTNode(data[key]);
 
             field.appendChild(keyEl);
             field.appendChild(valEl);

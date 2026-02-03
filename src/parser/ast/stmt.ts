@@ -28,25 +28,12 @@ export type FunctionDeclaration = Node<"FunctionDeclaration", {
     body: Expr;
 }>;
 
-// 类型定义
-export type TypeNode = PrimitiveType | TupleType;
-
-export interface PrimitiveType {
-    kind: 'Primitive';
-    name: string;
-}
-
-export interface TupleType {
-    kind: 'Tuple';
-    elements: TypeNode[];
-}
-
 /**
  * 变量声明语句
  * 例如: number a = 1;
  */
 export type VariableDeclaration = Node<"VariableDeclaration", {
-    varType: TypeNode;
+    varType: string;
     name: string;
     initializer: Expr;
 }>;
