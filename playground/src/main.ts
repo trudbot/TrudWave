@@ -2,16 +2,18 @@ import './style.css'
 // 相对路径引用，Vite 会自动解析
 import { createTokenStream } from '../../src/tokenizer/index';
 import { parse } from '../../src/parser/index';
-import defaultCode from './primes.tw?raw';
+import { interpret, type RuntimeValue } from '../../src/interpreter/index';
+import defaultCode from './demo.tw?raw';
 
 // DOM Elements
 const inputCode = document.getElementById('input-code') as HTMLTextAreaElement;
 const outputDisplay = document.getElementById('output-display') as HTMLDivElement;
 const btnAst = document.getElementById('btn-ast') as HTMLButtonElement;
 const btnTokens = document.getElementById('btn-tokens') as HTMLButtonElement;
+const btnRun = document.getElementById('btn-run') as HTMLButtonElement;
 const outputTitle = document.getElementById('output-title') as HTMLSpanElement;
 
-let currentMode: 'AST' | 'TOKENS' = 'AST';
+let currentMode: 'AST' | 'TOKENS' | 'RUN' = 'AST';
 
 // Set default code
 inputCode.value = defaultCode;
@@ -157,6 +159,41 @@ function createPrimitive(text: string, type: string): HTMLElement {
     return el;
 }
 
+function createRuntimeValueView(val: RuntimeValue): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'runtime-val-container';
+    
+    switch (val.type) {
+        case 'number':
+            container.innerHTML = `<span class="val-number">${(val as any).value}</span> <span class="type-tag">number</span>`;
+            break;
+        case 'string':
+            container.innerHTML = `<span class="val-string">"${(val as any).value}"</span> <span class="type-tag">string</span>`;
+            break;
+        case 'bool':
+            container.innerHTML = `<span class="val-boolean">${(val as any).value}</span> <span class="type-tag">bool</span>`;
+            break;
+        case 'null':
+            container.innerHTML = `<span class="val-null">null</span>`;
+            break;
+        case 'function':
+            const fn = val as any;
+            container.innerHTML = `<span class="val-func">Function</span> <span class="func-sig">${fn.name}(${fn.params.join(', ')})</span>`;
+            break;
+        case 'tuple':
+             const tuple = val as any;
+             container.innerHTML = `<span class="val-tuple">Tuple</span>`;
+             const list = document.createElement('div');
+             list.style.paddingLeft = '20px';
+             tuple.elements.forEach((e: RuntimeValue) => {
+                 list.appendChild(createRuntimeValueView(e));
+             });
+             container.appendChild(list);
+             break;
+    }
+    return container;
+}
+
 
 // --- Main Logic ---
 
@@ -219,6 +256,19 @@ function render() {
                 outputDisplay.appendChild(el);
             });
             
+        } else if (currentMode === 'RUN') {
+            // Run Mode
+            outputDisplay.classList.remove('ast-tree');
+            
+            const stream = createTokenStream(code);
+            const ast = parse(stream);
+            const result = interpret(ast);
+            
+            const resultView = document.createElement('div');
+            resultView.innerHTML = `<div style="margin-bottom:10px; font-weight:bold; color:#666;">Program Result:</div>`;
+            resultView.appendChild(createRuntimeValueView(result));
+            outputDisplay.appendChild(resultView);
+
         } else {
             // AST Mode
             outputDisplay.classList.add('ast-tree');
@@ -254,7 +304,26 @@ btnTokens.addEventListener('click', () => {
     currentMode = 'TOKENS';
     btnTokens.classList.add('active');
     btnAst.classList.remove('active');
+    btnRun.classList.remove('active');
     outputTitle.textContent = 'OUTPUT // TOKENS';
+    render();
+});
+
+btnRun.addEventListener('click', () => {
+    currentMode = 'RUN';
+    btnRun.classList.add('active');
+    btnAst.classList.remove('active');
+    btnTokens.classList.remove('active');
+    outputTitle.textContent = 'OUTPUT // EXECUTION RESULT';
+    render();
+});
+
+btnAst.addEventListener('click', () => {
+    currentMode = 'AST';
+    btnAst.classList.add('active');
+    btnTokens.classList.remove('active');
+    btnRun.classList.remove('active');
+    outputTitle.textContent = 'OUTPUT // AST';
     render();
 });
 

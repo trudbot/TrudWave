@@ -1,0 +1,10 @@
+// 阿克曼函数 (Ackermann Function)
+// A(m, n)
+<number, number, number>
+ack = match (m, n) {
+    when m == 0 -> n + 1;
+    when n == 0 -> ack(m - 1, 1);
+    otherwise   -> ack(m - 1, ack(m, n - 1));
+};
+
+ack(3, 3);

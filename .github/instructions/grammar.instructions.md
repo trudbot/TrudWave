@@ -29,6 +29,7 @@ number x = 1;
 };
 ```
 ```
+// 最后一个类型是返回值类型, 前面的类型是参数类型
 <number, number, text>
 compare = match (a, b) {
     when a > b -> "greater";
@@ -36,6 +37,7 @@ compare = match (a, b) {
     otherwise -> "equal";
 };
 
+// 使用 match 创建一个匿名函数
 <number, number, number>
 sum_2 = match(a, b) {
     when _ -> a + b;
@@ -47,10 +49,12 @@ sum_2 = match(a, b) {
 <number, number, number>
 sum_2(a, b) = a + b;
 
+// 函数调用函数
 <number, number, number, number>
 sum_3(a, b, c) = sum_2(sum_2(a, b), c);
 ```
 ```
+// 声明函数的两种语法
 funcName(a, b) = xxx;
 equal to
 funcName = match(a, b) {

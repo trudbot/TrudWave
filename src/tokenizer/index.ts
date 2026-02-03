@@ -39,7 +39,7 @@ const tokenSpecs: Specs = {
   'LOGIC_OP': /(?:&&|\|\||!)/,
 
   // 算术运算符
-  'ARITH_OP': /[+\-*/]/,
+  'ARITH_OP': /[+\-*/%]/,
 
   // 赋值
   'ASSIGN': /=/,

@@ -50,6 +50,26 @@ test('Parser: Function Declaration (Match style)', () => {
     assert.equal(body.cases.length, 2);
 });
 
+test('Parser: Function Declaration (Multi-arg Match style)', () => {
+    const code = `<number, number, number> gcd = match (a, b) {
+        when b == 0 -> a;
+        otherwise -> gcd(b, a); // Simplified body for parsing test
+    };`;
+    const stmt = getStmtAST(code) as FunctionDeclaration;
+
+    assert.equal(stmt.type, 'FunctionDeclaration');
+    assert.equal(stmt.name, 'gcd');
+    assert.deepEqual(stmt.params, ['a', 'b']);
+    assert.equal(stmt.returnType, 'number');
+    
+    // Check parameters in MatchExpression
+    const body = stmt.body as MatchExpression;
+    assert.equal(body.type, 'MatchExpression');
+    assert.equal(body.params.length, 2);
+    assert.equal(body.params[0].name, 'a');
+    assert.equal(body.params[1].name, 'b');
+});
+
 test('Parser: Function Declaration (Match style multiple params)', () => {
     const code = `<number, number, number> sum = match(a, b) {
         when _ -> a + b;

@@ -85,7 +85,7 @@ function parseTerm(cursor: TokenCursor): Expr {
  */
 function parseFactor(cursor: TokenCursor): Expr {
     let expr = parseUnary(cursor);
-    while (cursor.match(['ARITH_OP']) && ['*', '/'].includes(cursor.peek?.value!)) {
+    while (cursor.match(['ARITH_OP']) && ['*', '/', '%'].includes(cursor.peek?.value!)) {
         const operator = cursor.consume();
         const right = parseUnary(cursor);
         expr = createBinaryExpression(expr, operator.value!, right);
@@ -176,12 +176,27 @@ function parsePrimary(cursor: TokenCursor): Expr {
     
     if (cursor.match(['LPAREN'])) {
         cursor.consume();
-        const expr = parseExpression(cursor);
+        const elements: Expr[] = [];
+        elements.push(parseExpression(cursor));
+        
+        if (cursor.match(['COMMA'])) {
+             // It's a tuple!
+             while (cursor.match(['COMMA'])) {
+                 cursor.consume();
+                 elements.push(parseExpression(cursor));
+             }
+             cursor.expect('RPAREN', "Expected )");
+             return {
+                 type: 'TupleLiteral',
+                 elements
+             };
+        }
+
         if (!cursor.match(['RPAREN'])) {
             throw new Error("Expected )");
         }
         cursor.consume();
-        return expr;
+        return elements[0];
     }
     
     // Fallback or Identifier
