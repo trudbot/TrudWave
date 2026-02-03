@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrudWave Playground</title>
+</head>
+<body>
+    <header>
+        <h1>TrudWave</h1>
+        <div class="controls">
+            <div class="mode-switch">
+                <button class="mode-btn active" id="btn-ast">AST Geometry</button>
+                <button class="mode-btn" id="btn-tokens">Token Stream</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="panel">
+            <div class="panel-header">
+                <span>INPUT // SOURCE</span>
+                <div class="dots">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+            <div class="editor-area">
+                <textarea id="input-code" spellcheck="false" placeholder="Type your TrudWave code here...">number a = 1;
+string b = "hello";
+
+a == 1; 
+
+a + 23;
+</textarea>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span id="output-title">OUTPUT // AST</span>
+                <div class="dots">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+            <div class="editor-area">
+                <div id="output-display"></div>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

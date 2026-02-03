@@ -1,0 +1,28 @@
+{
+  "name": "trudwave",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsx --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trudbot/TrudWave.git"
+  },
+  "author": "trudbot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trudbot/TrudWave/issues"
+  },
+  "homepage": "https://github.com/trudbot/TrudWave#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/moo": "^0.5.10",
+    "@types/node": "^24.10.0",
+    "tsx": "^4.20.6"
+  },
+  "dependencies": {
+    "moo": "^0.5.2"
+  },
+  "type": "module"
+}
