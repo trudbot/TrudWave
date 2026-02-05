@@ -1,4 +1,7 @@
-design
+---
+name: grammar
+description: 编程语言的相关语法/使用的展示示例。 当需要了解trudwave怎么使用时阅读它。
+---
 
 **变量声明**
 
